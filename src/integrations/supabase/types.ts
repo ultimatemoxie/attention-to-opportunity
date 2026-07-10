@@ -14,7 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          bottleneck: string
+          business: string
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          landing_path: string | null
+          name: string
+          phone: string | null
+          referrer: string | null
+          revenue_range: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          website: string | null
+        }
+        Insert: {
+          bottleneck: string
+          business: string
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          landing_path?: string | null
+          name: string
+          phone?: string | null
+          referrer?: string | null
+          revenue_range?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          website?: string | null
+        }
+        Update: {
+          bottleneck?: string
+          business?: string
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          landing_path?: string | null
+          name?: string
+          phone?: string | null
+          referrer?: string | null
+          revenue_range?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
