@@ -16,17 +16,34 @@ export type Database = {
     Tables: {
       leads: {
         Row: {
+          acquisition_source: string | null
+          avg_customer_value: string | null
           bottleneck: string
           business: string
+          company_size: string | null
           consent: boolean
+          country: string | null
           created_at: string
           email: string
+          has_crm: boolean | null
+          has_website: boolean | null
           id: string
+          industry: string | null
+          investment_range: string | null
           landing_path: string | null
+          main_service: string | null
+          monthly_leads: string | null
           name: string
+          owner: string
           phone: string | null
+          pipeline_stage: string
           referrer: string | null
+          response_time: string | null
           revenue_range: string | null
+          role: string | null
+          solution_interest: string | null
+          submitted_at: string
+          timeline: string | null
           utm_campaign: string | null
           utm_content: string | null
           utm_medium: string | null
@@ -35,17 +52,34 @@ export type Database = {
           website: string | null
         }
         Insert: {
+          acquisition_source?: string | null
+          avg_customer_value?: string | null
           bottleneck: string
           business: string
+          company_size?: string | null
           consent?: boolean
+          country?: string | null
           created_at?: string
           email: string
+          has_crm?: boolean | null
+          has_website?: boolean | null
           id?: string
+          industry?: string | null
+          investment_range?: string | null
           landing_path?: string | null
+          main_service?: string | null
+          monthly_leads?: string | null
           name: string
+          owner?: string
           phone?: string | null
+          pipeline_stage?: string
           referrer?: string | null
+          response_time?: string | null
           revenue_range?: string | null
+          role?: string | null
+          solution_interest?: string | null
+          submitted_at?: string
+          timeline?: string | null
           utm_campaign?: string | null
           utm_content?: string | null
           utm_medium?: string | null
@@ -54,17 +88,34 @@ export type Database = {
           website?: string | null
         }
         Update: {
+          acquisition_source?: string | null
+          avg_customer_value?: string | null
           bottleneck?: string
           business?: string
+          company_size?: string | null
           consent?: boolean
+          country?: string | null
           created_at?: string
           email?: string
+          has_crm?: boolean | null
+          has_website?: boolean | null
           id?: string
+          industry?: string | null
+          investment_range?: string | null
           landing_path?: string | null
+          main_service?: string | null
+          monthly_leads?: string | null
           name?: string
+          owner?: string
           phone?: string | null
+          pipeline_stage?: string
           referrer?: string | null
+          response_time?: string | null
           revenue_range?: string | null
+          role?: string | null
+          solution_interest?: string | null
+          submitted_at?: string
+          timeline?: string | null
           utm_campaign?: string | null
           utm_content?: string | null
           utm_medium?: string | null

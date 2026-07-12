@@ -1,66 +1,137 @@
+# Myric AI — Customer-Growth Systems Website
 
-# Myric AI — Marketing Site Build Plan
+Current state: a first-pass build already exists (all 6 routes, dark navy design, `leads` table with UTM capture, sitemap, robots, SEO metadata). This plan upgrades it to the full brief: richer homepage sections, multi-step audit form with all qualification fields, confirmation + internal notification emails, expanded analytics, and pipeline/owner defaults on leads.
 
-## Scope
-Build the full site in one pass: all 6 routes, premium modern-tech design system, lead capture backed by Lovable Cloud, SEO baseline, and legal placeholders you can edit.
+---
 
-## Design system
-- **Palette (tokens in `src/styles.css`, oklch)**: deep navy background, near-black surfaces, white/light-grey text, electric blue primary, subtle cyan accent, restrained gradients.
-- **Type**: Sora for headings, Inter for body (loaded via `<link>` in `__root.tsx` head, then registered in `@theme` as `--font-display` / `--font-sans`).
-- **Motion**: framer-motion for one hero reveal + subtle section fades. No neon, no robot/brain imagery, no stock photos.
-- **Texture**: subtle grid background, connected-node diagram illustration in hero, controlled linear gradients on CTAs and section dividers.
+## 1. Website Architecture
 
-## Routes & sections
+Routes (TanStack Start, file-based):
+- `/` — homepage
+- `/growth-audit` — multi-step qualification form
+- `/thank-you` — confirmation + booking
+- `/privacy`, `/terms` — legal
+- `$.tsx` — branded 404
+- `/sitemap.xml`, `/robots.txt` — SEO
+- `/api/public/lead-notify` — internal server route (optional, or fold into server fn)
 
-**`/` Homepage**
-- Sticky nav (logo, links: How it works, Services, Growth Audit CTA)
-- Hero: headline "Turn online attention into qualified leads", subhead, primary CTA "Request a Growth Audit" → `/growth-audit`, secondary "See How It Works" → anchor
-- Three-service band: AI Content · Conversion Sites · CRM & Automation (connected-system diagram)
-- How It Works (4 steps)
-- Who it's for (audience qualifiers)
-- Outcomes strip (qualified leads / booked appointments / structured pipeline)
-- FAQ (6 items)
-- Final CTA band → Growth Audit
-- Footer (nav, legal, contact)
+Server layer:
+- `src/lib/leads.functions.ts` — `createServerFn` for insert + email dispatch
+- `src/lib/analytics.ts` — `trackEvent` → `window.dataLayer`
+- `src/lib/utm.ts` — capture + sessionStorage persistence
 
-**`/growth-audit`**
-- Focused header, no distractions
-- Value bullets + form: name, business, website, email, phone, monthly revenue range, biggest bottleneck (textarea), consent checkbox
-- Zod validation, inline errors, submitting state
-- On submit: insert into Cloud `leads` table with captured UTM params (source/medium/campaign/term/content) + referrer + landing page → navigate to `/thank-you`
+## 2. Component Structure
 
-**`/thank-you`**
-- Confirmation, next-step instructions
-- "Book your call" button linking to external booking URL (placeholder `https://cal.com/myric` — you can swap it later or ask me to embed Calendly)
-- Secondary link back home
+```text
+src/components/site/
+  Nav.tsx              sticky, mobile sheet menu
+  Footer.tsx
+  Hero.tsx             + JourneyDiagram.tsx (animated Content→…→Customer)
+  ProblemCards.tsx     3 cards
+  EngineCards.tsx      Attention / Conversion / Follow-Up
+  ProcessSteps.tsx     5-stage (Diagnose→Optimise)
+  AudienceGrid.tsx     5 industries + qualification statement
+  ProofGallery.tsx     labelled conceptual placeholders
+  AuditInvite.tsx      what the audit covers + CTA
+  FAQ.tsx
+  CTASection.tsx
+  GridBackground.tsx   subtle node pattern
 
-**`/privacy`, `/terms`** — clean typographic templates with editable placeholder copy tailored to a UK-style service business.
+src/components/audit/
+  AuditForm.tsx        multi-step controller
+  Step1Contact.tsx     name, email, phone, role
+  Step2Business.tsx    business, website, country, industry, service, size
+  Step3Metrics.tsx     customer value, monthly leads, has website, has CRM, acquisition source, response time
+  Step4Goals.tsx       challenge, solution interest, timeline, investment
+  Step5Consent.tsx     consent + submit
+  ProgressBar.tsx
+  FieldGroup.tsx       label + helper + error
+```
 
-**`/404`** — already handled by root `notFoundComponent`; I'll restyle it to match the brand.
+## 3. User Journey
 
-## Data & backend (Lovable Cloud)
-- Enable Cloud.
-- Table `public.leads`: id, created_at, name, business, website, email, phone, revenue_range, bottleneck, consent, utm_source, utm_medium, utm_campaign, utm_term, utm_content, referrer, landing_path.
-- GRANTs: `INSERT` to `anon` + `authenticated`; no SELECT to anon (leads are private). `ALL` to `service_role`. RLS enabled with an INSERT-only policy `WITH CHECK (true)`.
-- Submission via a `createServerFn` that validates with zod and inserts using the server publishable client (respects the anon INSERT policy).
-- UTM capture: small hook reads `window.location.search` on mount of `/growth-audit`, persists to sessionStorage so cross-page navigation preserves attribution.
+```text
+Homepage (hero CTA)
+   → /growth-audit (5-step form, UTM captured on load)
+      → server fn: validate → insert lead (stage=Audit Requested, owner=Aqza)
+                → confirmation email to prospect
+                → internal notification email
+                → analytics: audit_form_submitted
+      → /thank-you (booking button → external calendar)
+         → analytics: booking_calendar_opened → discovery_call_booked
+```
 
-## SEO & metadata
-- Per-route `head()` with unique title, description, og:title, og:description, og:url, canonical (relative paths — no domain set yet).
-- Root sets viewport, charset, og:type=website, og:site_name=Myric AI, twitter:card.
-- JSON-LD Organization on `__root.tsx`; Service schema on `/growth-audit`.
-- `public/robots.txt` (Allow: /), `src/routes/sitemap[.]xml.ts` with all public routes.
-- Privacy/terms carry `noindex`? No — indexable. `/thank-you` gets `noindex`.
+## 4. Responsive Layout Strategy
 
-## Analytics events
-- Lightweight `trackEvent` helper writing to `window.dataLayer` (safe no-op if absent) so you can wire GA4/Plausible later. Events: `cta_click`, `form_start`, `form_submit`, `form_error`.
+- Mobile-first Tailwind v4; breakpoints `sm/md/lg`.
+- Grid rows use `grid-cols-[minmax(0,1fr)_auto]` on mobile → `sm:flex`.
+- Cards stack vertically <md, 2-col md, 3-col lg.
+- Sticky nav collapses to sheet menu <md; CTA stays visible.
+- Journey diagram: horizontal SVG lg, vertical stacked <md.
+- Form: one step per screen on mobile; two-column fields lg only where natural.
+- `prefers-reduced-motion` disables framer-motion transitions.
 
-## Technical details
-- New files: route files, `src/components/site/` (Nav, Footer, Hero, ServiceCard, StepList, FAQ, CTASection, GridBackground, ConnectedDiagram), `src/lib/utm.ts`, `src/lib/analytics.ts`, `src/lib/leads.functions.ts` (createServerFn), Cloud migration for `leads`.
-- Update `__root.tsx`: real metadata, font `<link>` tags, remove "Lovable App" defaults.
-- Update `src/styles.css`: new tokens (`--font-display`, `--font-sans`, refined navy/electric-blue palette, gradient + shadow tokens), keep shadcn `@theme inline` mapping.
-- Replace `src/routes/index.tsx` placeholder.
-- Add sitemap route, robots.txt.
+## 5. Database Schema (extends existing `leads`)
 
-## Deliverable in this pass
-Fully navigable site with working lead capture into Cloud, external booking link on thank-you, SEO metadata, sitemap, and legal placeholders. You can later: swap the booking URL for a Calendly embed, replace legal copy, connect analytics, and add case studies.
+Existing columns kept. Add:
+
+```text
+country              text
+industry             text
+main_service         text
+role                 text
+company_size         text
+avg_customer_value   text
+monthly_leads        text
+has_website          boolean
+has_crm              boolean
+acquisition_source   text
+response_time        text
+solution_interest    text
+timeline             text
+investment_range     text
+pipeline_stage       text  default 'Audit Requested'
+owner                text  default 'Aqza'
+submitted_at         timestamptz default now()
+```
+
+RLS: keep `anon/authenticated INSERT` with CHECK validation; no SELECT for anon. `service_role` full access. GRANTs included in the same migration.
+
+## 6. Form-Submission Workflow
+
+1. Client: Zod validation per step, disable Next until valid.
+2. Submit → `createServerFn` (public, rate-limited by IP header check).
+3. Server: re-validate with Zod, insert into `leads` with defaults.
+4. Server: send confirmation email to prospect + internal notification (via Resend using existing `LOVABLE_API_KEY`-style secret, or connector if available — will confirm which in Questions).
+5. Return `{ok:true}`; client fires `audit_form_submitted`, navigates to `/thank-you`.
+6. Errors surface inline; retry preserves entered data.
+
+## 7. Analytics Events
+
+Wired via `trackEvent(name, props)` → `window.dataLayer.push`:
+- `hero_primary_cta_clicked`, `hero_secondary_cta_clicked`
+- `growth_audit_cta_clicked`
+- `audit_form_started`, `audit_form_step_completed` (with `step`), `audit_form_abandoned` (beforeunload), `audit_form_submitted`
+- `booking_calendar_opened`, `discovery_call_booked`
+- `portfolio_item_viewed`, `service_card_clicked`
+
+## 8. SEO Implementation
+
+- Per-route `head()` with unique title, description, canonical (relative), og:*, twitter:card.
+- Root: Organization JSON-LD, site-wide og defaults, fonts via `<link>` in root head.
+- `/growth-audit`: Service JSON-LD.
+- `/`: FAQPage JSON-LD from FAQ content.
+- `public/robots.txt` allows all + sitemap.
+- `src/routes/sitemap[.]xml.tsx` lists 5 public routes.
+- Semantic H1/H2/H3, alt text, `lang="en"`.
+
+## 9. Questions & Risks
+
+1. **Emails** — which provider? Options: (a) Resend (need `RESEND_API_KEY` secret + verified sender domain), (b) skip emails for now and only store the lead, (c) already have a connector I should use.
+2. **Booking URL** — real Cal.com/Calendly link to embed on `/thank-you`? Currently placeholder `https://cal.com/myric-ai`.
+3. **Internal notification recipient** — which email address receives new lead alerts?
+4. **Proof gallery assets** — use abstract placeholder graphics for now (clearly labelled "conceptual demonstration"), or wait for real assets?
+5. **Risk — no revenue/perf claims**: copy will avoid guarantees; qualification statement included.
+6. **Risk — form length**: 20 fields is heavy; multi-step + progress bar mitigates, but expect drop-off. `audit_form_abandoned` will surface it.
+
+Approve and I'll implement the delta on top of the existing build.

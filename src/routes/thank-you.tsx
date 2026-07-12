@@ -53,9 +53,7 @@ function ThankYou() {
               href={BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() =>
-                trackEvent("cta_click", { location: "thank_you", cta: "book_call" })
-              }
+              onClick={() => trackEvent("booking_calendar_opened")}
               className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-[0_10px_30px_-12px_var(--electric)]"
             >
               Book your intro call
