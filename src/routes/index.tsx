@@ -247,7 +247,7 @@ function Engines() {
             onClick={() => trackEvent("service_card_clicked", { engine: s.tag })}
             className="group relative overflow-hidden rounded-2xl border border-border/60 bg-background p-6 text-left transition-colors hover:border-primary/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
               {s.tag}
             </div>
@@ -328,7 +328,7 @@ function Proof() {
             onClick={() => trackEvent("portfolio_item_viewed", { item: p.title })}
             className="group relative overflow-hidden rounded-2xl border border-border/60 bg-surface/50 p-6 text-left transition-colors hover:border-primary/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <div className="aspect-[16/10] w-full rounded-lg border border-border/60 bg-gradient-to-br from-surface via-surface-2 to-surface" />
+            <div className="aspect-[16/10] w-full rounded-lg border border-border/60 bg-linear-to-br from-surface via-surface-2 to-surface" />
             <div className="mt-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
               {p.tag}
             </div>
@@ -416,7 +416,7 @@ function Faq() {
 function FinalCta() {
   return (
     <Section>
-      <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-surface via-surface-2 to-surface p-8 sm:p-14">
+      <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-linear-to-br from-surface via-surface-2 to-surface p-8 sm:p-14">
         <div className="absolute -right-32 -top-32 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
         <div className="relative grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
           <div>
