@@ -67,12 +67,12 @@ export function SiteNav() {
 
 function LogoMark() {
   return (
-    <span className="grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-primary to-cyan">
-      <svg viewBox="0 0 24 24" className="h-4 w-4 text-primary-foreground" aria-hidden>
-        <path
-          fill="currentColor"
-          d="M4 4h4l4 8 4-8h4v16h-3V9.5L13 17h-2L7 9.5V20H4z"
-        />
+    <span className="relative grid h-8 w-8 place-items-center rounded-full bg-navy">
+      <svg viewBox="0 0 32 32" className="h-5 w-5" aria-hidden>
+        <circle cx="8" cy="10" r="2" fill="#C79635" />
+        <circle cx="24" cy="10" r="2" fill="#C79635" />
+        <circle cx="16" cy="22" r="2" fill="#C79635" />
+        <path d="M8 10 L16 22 L24 10" stroke="#FAF8F3" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </span>
   );
