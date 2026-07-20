@@ -1,5 +1,5 @@
-// Simple connected-system diagram — three nodes wired to a central hub.
-// Pure SVG, no external deps.
+// Connected-system diagram — three nodes wired to a central hub.
+// Editorial navy + gold, warm-white paper.
 
 export function ConnectedDiagram({ className }: { className?: string }) {
   return (
@@ -11,12 +11,12 @@ export function ConnectedDiagram({ className }: { className?: string }) {
     >
       <defs>
         <linearGradient id="line" x1="0" x2="1">
-          <stop offset="0%" stopColor="oklch(0.72 0.2 250)" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="oklch(0.82 0.14 210)" stopOpacity="0.4" />
+          <stop offset="0%" stopColor="#C79635" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="#C79635" stopOpacity="0.25" />
         </linearGradient>
         <radialGradient id="hub" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="oklch(0.82 0.14 210)" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="oklch(0.68 0.19 250)" stopOpacity="0.1" />
+          <stop offset="0%" stopColor="#C79635" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="#061A3A" stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -34,8 +34,8 @@ export function ConnectedDiagram({ className }: { className?: string }) {
 
       {/* hub */}
       <circle cx="260" cy="160" r="46" fill="url(#hub)" />
-      <circle cx="260" cy="160" r="14" fill="oklch(0.72 0.2 250)" />
-      <circle cx="260" cy="160" r="6" fill="oklch(0.98 0.005 250)" />
+      <circle cx="260" cy="160" r="14" fill="#061A3A" />
+      <circle cx="260" cy="160" r="5" fill="#C79635" />
     </svg>
   );
 }
@@ -46,16 +46,17 @@ function NodeCard({ x, y, label, hint }: { x: number; y: number; label: string; 
       <rect
         width="140"
         height="60"
-        rx="10"
-        fill="oklch(0.22 0.03 260)"
-        stroke="oklch(1 0 0 / 12%)"
+        rx="8"
+        fill="#FFFFFF"
+        stroke="#E7E1D5"
       />
       <text
         x="16"
         y="26"
-        fill="oklch(0.72 0.02 255)"
-        fontSize="10"
-        fontFamily="Inter, sans-serif"
+        fill="#C79635"
+        fontSize="9"
+        fontFamily="Manrope, sans-serif"
+        fontWeight="600"
         letterSpacing="2"
       >
         {hint.toUpperCase()}
@@ -63,9 +64,9 @@ function NodeCard({ x, y, label, hint }: { x: number; y: number; label: string; 
       <text
         x="16"
         y="46"
-        fill="oklch(0.97 0.005 250)"
+        fill="#061A3A"
         fontSize="14"
-        fontFamily="Sora, sans-serif"
+        fontFamily="Cormorant Garamond, serif"
         fontWeight="600"
       >
         {label}

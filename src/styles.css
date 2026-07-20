@@ -5,14 +5,16 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Myric AI — premium modern-tech design system.
- * Dark navy canvas, electric-blue primary, restrained cyan accents.
- * Sora display + Inter body loaded via <link> in __root.tsx.
+ * Myric AI — premium editorial-technology brand system.
+ * Warm-white canvas, primary navy, Myric gold accents.
+ * Cormorant Garamond (display) + Manrope (sans) + Inter (body)
+ * loaded via <link> in __root.tsx.
  */
 
 @theme inline {
-  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -44,50 +46,56 @@
 
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
-  --color-cyan: var(--cyan);
-  --color-electric: var(--electric);
+  --color-cyan: var(--gold);
+  --color-electric: var(--gold);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.5rem;
 
-  /* Deep navy canvas */
-  --background: oklch(0.16 0.03 260);
-  --foreground: oklch(0.97 0.005 250);
+  /* Warm white canvas, navy ink */
+  --background: #FAF8F3;
+  --foreground: #061A3A;
 
-  --surface: oklch(0.2 0.03 260);
-  --surface-2: oklch(0.24 0.035 260);
+  --surface: #FFFFFF;
+  --surface-2: #F3EEE2;
 
-  --card: oklch(0.2 0.03 260);
-  --card-foreground: oklch(0.97 0.005 250);
-  --popover: oklch(0.2 0.03 260);
-  --popover-foreground: oklch(0.97 0.005 250);
+  --card: #FFFFFF;
+  --card-foreground: #061A3A;
+  --popover: #FFFFFF;
+  --popover-foreground: #061A3A;
 
-  /* Electric blue primary */
-  --primary: oklch(0.68 0.19 250);
-  --primary-foreground: oklch(0.14 0.03 260);
-  --electric: oklch(0.72 0.2 250);
-  --cyan: oklch(0.82 0.14 210);
+  /* Primary is navy; gold is the accent */
+  --primary: #061A3A;
+  --primary-foreground: #FAF8F3;
+  --navy: #061A3A;
+  --navy-deep: #031127;
+  --gold: #C79635;
+  --gold-soft: #E1C27A;
 
-  --secondary: oklch(0.27 0.035 260);
-  --secondary-foreground: oklch(0.97 0.005 250);
-  --muted: oklch(0.24 0.03 260);
-  --muted-foreground: oklch(0.72 0.02 255);
-  --accent: oklch(0.3 0.06 250);
-  --accent-foreground: oklch(0.97 0.005 250);
-  --destructive: oklch(0.65 0.22 25);
-  --destructive-foreground: oklch(0.98 0.005 250);
+  --secondary: #F3EEE2;
+  --secondary-foreground: #061A3A;
+  --muted: #F3EEE2;
+  --muted-foreground: #566176;
+  --accent: #C79635;
+  --accent-foreground: #061A3A;
+  --destructive: #B4442A;
+  --destructive-foreground: #FAF8F3;
 
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 10%);
-  --ring: oklch(0.68 0.19 250);
+  --border: #E7E1D5;
+  --input: #E7E1D5;
+  --ring: #C79635;
 }
 
 .dark {
-  --background: oklch(0.16 0.03 260);
-  --foreground: oklch(0.97 0.005 250);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 10%);
+  --background: #FAF8F3;
+  --foreground: #061A3A;
+  --border: #E7E1D5;
+  --input: #E7E1D5;
 }
 
 @layer base {
@@ -95,44 +103,62 @@
     border-color: var(--color-border);
   }
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
+    font-weight: 600;
   }
   ::selection {
-    background: color-mix(in oklab, var(--electric) 40%, transparent);
+    background: color-mix(in oklab, var(--gold) 45%, transparent);
     color: var(--foreground);
   }
 }
 
 @utility bg-grid {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, white 4%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, white 4%, transparent) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, #061A3A 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, #061A3A 5%, transparent) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
 @utility bg-radial-glow {
   background: radial-gradient(
-    ellipse 60% 50% at 50% 0%,
-    color-mix(in oklab, var(--electric) 25%, transparent),
+    ellipse 55% 45% at 50% 0%,
+    color-mix(in oklab, var(--gold) 22%, transparent),
     transparent 70%
   );
 }
 
 @utility text-gradient {
-  background: linear-gradient(180deg, oklch(0.98 0.005 250) 0%, oklch(0.78 0.09 240) 100%);
+  background: linear-gradient(180deg, #061A3A 0%, #1a355e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+
+@utility text-gold {
+  color: var(--gold);
+}
+
+@utility bg-navy {
+  background-color: var(--navy);
+}
+
+@utility bg-navy-deep {
+  background-color: var(--navy-deep);
+}
+
+@utility divider-gold {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
 }
