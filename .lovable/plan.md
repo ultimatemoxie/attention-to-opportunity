@@ -1,137 +1,105 @@
-# Myric AI — Customer-Growth Systems Website
+# Myric AI — Brand Redesign Plan
 
-Current state: a first-pass build already exists (all 6 routes, dark navy design, `leads` table with UTM capture, sitemap, robots, SEO metadata). This plan upgrades it to the full brief: richer homepage sections, multi-step audit form with all qualification fields, confirmation + internal notification emails, expanded analytics, and pipeline/owner defaults on leads.
+Rebrand the existing site to the final Myric AI identity. **No copy, route, form, or functional changes.** All edits are visual/presentation.
 
----
+## Audit — current state
 
-## 1. Website Architecture
+- Design tokens: dark navy canvas, electric blue + cyan accents, Sora + Inter (styles.css)
+- Components: `SiteNav`, `SiteFooter`, `Section`/`Eyebrow`, `ConnectedDiagram`
+- Routes: `/`, `/growth-audit`, `/thank-you`, `/privacy`, `/terms`, sitemap, 404 in `__root`
+- Homepage (443 lines) already has: hero, problem, three-engine, how-it-works, who-it-is-for, demonstrations, growth audit CTA, FAQ, final CTA
+- Fonts loaded via `<link>` in `__root.tsx` (Sora + Inter)
 
-Routes (TanStack Start, file-based):
-- `/` — homepage
-- `/growth-audit` — multi-step qualification form
-- `/thank-you` — confirmation + booking
-- `/privacy`, `/terms` — legal
-- `$.tsx` — branded 404
-- `/sitemap.xml`, `/robots.txt` — SEO
-- `/api/public/lead-notify` — internal server route (optional, or fold into server fn)
+## 1. Design tokens (`src/styles.css`)
 
-Server layer:
-- `src/lib/leads.functions.ts` — `createServerFn` for insert + email dispatch
-- `src/lib/analytics.ts` — `trackEvent` → `window.dataLayer`
-- `src/lib/utm.ts` — capture + sessionStorage persistence
+Swap palette wholesale — no purple/cyan/neon:
 
-## 2. Component Structure
-
-```text
-src/components/site/
-  Nav.tsx              sticky, mobile sheet menu
-  Footer.tsx
-  Hero.tsx             + JourneyDiagram.tsx (animated Content→…→Customer)
-  ProblemCards.tsx     3 cards
-  EngineCards.tsx      Attention / Conversion / Follow-Up
-  ProcessSteps.tsx     5-stage (Diagnose→Optimise)
-  AudienceGrid.tsx     5 industries + qualification statement
-  ProofGallery.tsx     labelled conceptual placeholders
-  AuditInvite.tsx      what the audit covers + CTA
-  FAQ.tsx
-  CTASection.tsx
-  GridBackground.tsx   subtle node pattern
-
-src/components/audit/
-  AuditForm.tsx        multi-step controller
-  Step1Contact.tsx     name, email, phone, role
-  Step2Business.tsx    business, website, country, industry, service, size
-  Step3Metrics.tsx     customer value, monthly leads, has website, has CRM, acquisition source, response time
-  Step4Goals.tsx       challenge, solution interest, timeline, investment
-  Step5Consent.tsx     consent + submit
-  ProgressBar.tsx
-  FieldGroup.tsx       label + helper + error
+```
+--background:      #FAF8F3  (warm white — becomes default)
+--foreground:      #061A3A  (primary navy)
+--surface:         #FFFFFF
+--surface-2:       #F3EEE2  (soft paper)
+--primary:         #061A3A  (navy)
+--primary-foreground: #FAF8F3
+--accent-gold:     #C79635  (Myric gold)
+--accent-gold-soft:#E1C27A
+--navy-deep:       #031127
+--muted-foreground:#566176  (slate)
+--border:          #E7E1D5  (light warm border)
 ```
 
-## 3. User Journey
+- Remove `.dark` class from `<html>` in `__root.tsx` — site is light/warm now.
+- Replace `--font-display` with `"Cormorant Garamond"` (editorial serif).
+- Add `--font-sans` = `Manrope`, keep Inter for body/forms via `--font-body`.
+- Update Google Fonts link: `Cormorant+Garamond:wght@500;600;700|Manrope:wght@400;500;600;700|Inter:wght@400;500;600`.
+- Update `bg-grid` / `bg-radial-glow` utilities to warm-white base with subtle gold radial + faint navy grid.
+- Add utilities: `text-gold`, `bg-navy`, `bg-navy-deep`, `divider-gold` (thin 1px gold rule), `paper-texture` (very subtle noise/marble via SVG data-URI).
+- `theme-color` meta → `#061A3A`.
 
-```text
-Homepage (hero CTA)
-   → /growth-audit (5-step form, UTM captured on load)
-      → server fn: validate → insert lead (stage=Audit Requested, owner=Aqza)
-                → confirmation email to prospect
-                → internal notification email
-                → analytics: audit_form_submitted
-      → /thank-you (booking button → external calendar)
-         → analytics: booking_calendar_opened → discovery_call_booked
-```
+## 2. Logo asset
 
-## 4. Responsive Layout Strategy
+- Upload the provided brand sheet crops via `lovable-assets create` to produce:
+  - `myric-horizontal.svg` (nav desktop + footer reversed)
+  - `myric-mark.svg` (nav mobile, favicon fallback)
+- Replace inline `<LogoMark />` SVG in `src/components/site/nav.tsx` and `SiteFooter`.
+- Since the upload is a raster brand sheet, I'll recreate the mark as clean inline SVG (M in circle w/ 4 connected nodes, navy + gold gradient) rather than crop the PNG — sharp at any size, matches identity, no image weight.
 
-- Mobile-first Tailwind v4; breakpoints `sm/md/lg`.
-- Grid rows use `grid-cols-[minmax(0,1fr)_auto]` on mobile → `sm:flex`.
-- Cards stack vertically <md, 2-col md, 3-col lg.
-- Sticky nav collapses to sheet menu <md; CTA stays visible.
-- Journey diagram: horizontal SVG lg, vertical stacked <md.
-- Form: one step per screen on mobile; two-column fields lg only where natural.
-- `prefers-reduced-motion` disables framer-motion transitions.
+## 3. Navigation (`src/components/site/nav.tsx`)
 
-## 5. Database Schema (extends existing `leads`)
+- Warm-white translucent bg (`bg-background/80 backdrop-blur` after scroll)
+- Thin `border-b border-[--border]` on scroll
+- Nav links: navy text, gold underline on hover (animated `after:` bar)
+- CTA button: solid navy, warm-white text, gold arrow `→`
+- Mobile: swap horizontal lockup for compact mark
 
-Existing columns kept. Add:
+## 4. Footer (`footer.tsx`)
 
-```text
-country              text
-industry             text
-main_service         text
-role                 text
-company_size         text
-avg_customer_value   text
-monthly_leads        text
-has_website          boolean
-has_crm              boolean
-acquisition_source   text
-response_time        text
-solution_interest    text
-timeline             text
-investment_range     text
-pipeline_stage       text  default 'Audit Requested'
-owner                text  default 'Aqza'
-submitted_at         timestamptz default now()
-```
+- `bg-navy-deep` (#031127), warm-white text
+- Reversed logo (mark + wordmark in warm white with gold node)
+- Tagline: "Connected. Automated. Growth."
+- Faint connected-node SVG pattern in background (5% opacity)
+- Keep all existing links exactly
 
-RLS: keep `anon/authenticated INSERT` with CHECK validation; no SELECT for anon. `service_role` full access. GRANTs included in the same migration.
+## 5. Homepage (`src/routes/index.tsx`) — section by section
 
-## 6. Form-Submission Workflow
+Copy is preserved verbatim. Only wrappers, tokens, and decorative visuals change.
 
-1. Client: Zod validation per step, disable Next until valid.
-2. Submit → `createServerFn` (public, rate-limited by IP header check).
-3. Server: re-validate with Zod, insert into `leads` with defaults.
-4. Server: send confirmation email to prospect + internal notification (via Resend using existing `LOVABLE_API_KEY`-style secret, or connector if available — will confirm which in Questions).
-5. Return `{ok:true}`; client fires `audit_form_submitted`, navigates to `/thank-you`.
-6. Errors surface inline; retry preserves entered data.
+- **Hero**: warm-white bg with faint architectural line-art SVG + tiny node grid. Left col unchanged copy; highlight 2–3 outcome words in gold via inline `<span class="text-gold">`. Right: replace current diagram with new **ConnectedJourney** SVG — 5 nodes (Attention → Website → Lead → CRM → Customer) on a curved path, thin gold connectors, a small gold dot animating along the path (`@keyframes` + `prefers-reduced-motion` guard).
+- **Problem section**: `bg-navy-deep`, warm-white text, gold uppercase labels, thin gold top border on each card, faint connecting hairlines between the 3 cards. Add the "Disconnected tools create disconnected growth." pull-quote centered below (already exists or add if copy present).
+- **Three-engine system**: warm-white section, three large panels side-by-side on desktop w/ a thin gold horizontal rule running behind them. Each panel: navy line icon, existing title/copy, small demonstration mini-mock (SVG), gold outcome pill, hover lifts border to gold.
+- **How it works**: five numbered navy circles on a horizontal gold line (desktop) / vertical timeline (mobile). Add small gold deliverable labels under each step (Diagnose → audit doc, Design → system map, Build → live components, Launch → go-live, Optimise → monthly review) — these are labels not copy changes to the descriptions.
+- **Who it is for**: editorial grid, navy line icons replace any emoji/filled icons, add a bordered gold-accent "qualification card" wrapping the existing final statement.
+- **System demonstrations**: one large featured card "Connected Growth System" spanning full width w/ inline SVG showing AI Content → Landing Page → Lead Form → CRM → Follow-Up → Booked Call as chained mini-UI mocks. Below: 4 smaller cards (AI video, landing page, CRM pipeline, before/after). Keep "Conceptual demonstration" pill. Add expand-on-click: reveal problem / what was designed / components / metric (already in copy? — if not, use existing card body; no new copy invented).
+- **Growth Audit CTA**: `bg-navy-deep`, gold check icons for the checklist, warm-white text, right col shows a small system-audit diagram (SVG of the same 5-node flow with a magnifier glyph).
+- **FAQ**: warm-white bg, navy accordion headings, gold `+` / `−` icons, fine `border-[--border]` between items.
+- **Final CTA**: `bg-navy-deep`, warm-white heading (serif), gold accent word, navy button on warm-white or outlined gold.
 
-## 7. Analytics Events
+## 6. Growth Audit / Thank-You / Privacy / Terms
 
-Wired via `trackEvent(name, props)` → `window.dataLayer.push`:
-- `hero_primary_cta_clicked`, `hero_secondary_cta_clicked`
-- `growth_audit_cta_clicked`
-- `audit_form_started`, `audit_form_step_completed` (with `step`), `audit_form_abandoned` (beforeunload), `audit_form_submitted`
-- `booking_calendar_opened`, `discovery_call_booked`
-- `portfolio_item_viewed`, `service_card_clicked`
+- Re-skin only: warm-white backgrounds, navy headings (Cormorant), Manrope labels, gold accents on step indicators and check marks. **Zero form field / validation / submission changes.**
 
-## 8. SEO Implementation
+## 7. Root layout (`__root.tsx`)
 
-- Per-route `head()` with unique title, description, canonical (relative), og:*, twitter:card.
-- Root: Organization JSON-LD, site-wide og defaults, fonts via `<link>` in root head.
-- `/growth-audit`: Service JSON-LD.
-- `/`: FAQPage JSON-LD from FAQ content.
-- `public/robots.txt` allows all + sitemap.
-- `src/routes/sitemap[.]xml.tsx` lists 5 public routes.
-- Semantic H1/H2/H3, alt text, `lang="en"`.
+- Remove `className="dark"` from `<html>`.
+- Update fonts link (Cormorant Garamond + Manrope + Inter).
+- Update `theme-color` to `#061A3A`.
+- 404 page: warm-white bg, navy heading, gold accent.
 
-## 9. Questions & Risks
+## 8. Motion & a11y
 
-1. **Emails** — which provider? Options: (a) Resend (need `RESEND_API_KEY` secret + verified sender domain), (b) skip emails for now and only store the lead, (c) already have a connector I should use.
-2. **Booking URL** — real Cal.com/Calendly link to embed on `/thank-you`? Currently placeholder `https://cal.com/myric-ai`.
-3. **Internal notification recipient** — which email address receives new lead alerts?
-4. **Proof gallery assets** — use abstract placeholder graphics for now (clearly labelled "conceptual demonstration"), or wait for real assets?
-5. **Risk — no revenue/perf claims**: copy will avoid guarantees; qualification statement included.
-6. **Risk — form length**: 20 fields is heavy; multi-step + progress bar mitigates, but expect drop-off. `audit_form_abandoned` will surface it.
+- All animations respect `@media (prefers-reduced-motion: reduce)` — kill journey-dot travel + hover lifts.
+- Focus rings: 2px gold offset on all interactive elements.
+- Contrast: navy on warm-white = 15:1; gold reserved for accents/large text only (gold-on-warm-white ~3.5:1 → decorative only, never body copy).
 
-Approve and I'll implement the delta on top of the existing build.
+## 9. Performance
+
+- Fonts: `display=swap`, preconnect already present.
+- All new visuals are inline SVG (no raster).
+- Paper texture: single tiny SVG data-URI, no image request.
+- Lazy-mount FAQ + demonstrations sections stay as-is (already server-rendered static).
+
+## Out of scope (explicit)
+
+- No copy edits, no new sections, no route changes, no form/DB/analytics changes, no new dependencies.
+
+Ready to implement on approval.
