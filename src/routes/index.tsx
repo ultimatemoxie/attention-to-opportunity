@@ -3,45 +3,56 @@ import { SiteNav } from "@/components/site/nav";
 import { SiteFooter } from "@/components/site/footer";
 import { Section, Eyebrow } from "@/components/site/section";
 import { ConnectedDiagram } from "@/components/site/connected-diagram";
+import {
+  AdCreativeMock,
+  LandingPageMock,
+  FollowUpQueueMock,
+  CampaignJourneyMock,
+} from "@/components/site/demo-mocks";
 import { trackEvent } from "@/lib/analytics";
 
 const faqs = [
   {
-    q: "Who is Myric AI for?",
-    a: "Established high-value service businesses — professional services, home services, real estate, clinics, consultants — with a proven offer, capacity for more customers, and a team ready to respond to opportunities.",
+    q: "Who is this for?",
+    a: "Shopify and e-commerce brands with active ads and a destination that doesn't match the ad. Other stacks with the same leak can talk.",
   },
   {
     q: "What is a Growth Audit?",
-    a: "A structured review of your website, calls to action, lead capture, content, CRM structure and follow-up. You leave with a prioritised action plan.",
+    a: "A structured look at creative, the post-click page, and what happens after interest. You leave with priorities, not a 40-page PDF.",
   },
   {
     q: "Do you guarantee results?",
-    a: "No. We don't do guaranteed-revenue promises. We build measurable systems and optimise them against your real numbers.",
+    a: "No. No fake average ROI. We build measurable systems and optimise them against your real numbers.",
   },
   {
-    q: "How long does implementation take?",
-    a: "Most systems go live in three to six weeks depending on scope. Quick wins usually land in the first two weeks.",
+    q: "How long is the first sprint?",
+    a: "Campaign landing: days to two weeks once we have ads, destination and theme access.",
   },
   {
-    q: "Do we need to replace our current tools?",
-    a: "Usually not. We work with your existing website, CRM and calendar where sensible.",
+    q: "Do you run the ads?",
+    a: "No. Media buying stays with you. We work on everything after the click.",
+  },
+  {
+    q: "Do we replace Shopify or Klaviyo?",
+    a: "No. We work with your existing stack. Custom CRM is not the first conversation.",
   },
 ];
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Myric AI | Websites, AI Content and CRM Growth Systems" },
+      { title: "Myric AI | Turn attention into customers" },
       {
         name: "description",
         content:
-          "Myric AI helps service businesses attract attention, convert visitors into qualified leads and automate follow-up through connected websites, AI content and CRM systems.",
+          "AI creative, conversion-focused campaign pages and connected follow-up systems for e-commerce brands already spending on ads.",
       },
-      { property: "og:title", content: "Myric AI | Websites, AI Content and CRM Growth Systems" },
+      { property: "og:title", content: "Myric AI | Turn attention into customers" },
       {
         property: "og:description",
         content:
-          "Connected customer-growth systems for service businesses — AI content, conversion websites and CRM automation.",
+          "AI creative, conversion-focused experiences and connected follow-up systems for e-commerce brands.",
       },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -67,70 +78,88 @@ export const Route = createFileRoute("/")({
 
 const problems = [
   {
-    title: "Attention without direction",
-    body: "Content and ads drive views but don't route the right prospects to an offer or enquiry point.",
+    title: "Attention without a destination",
+    body: "Ads and video get the click. The click lands on the catalogue homepage.",
   },
   {
     title: "Website without conversion",
-    body: "Traffic arrives, scrolls, and leaves. The site informs but never asks for a clear next step.",
+    body: "The PDP or home page doesn't continue the promise in the ad. Paid traffic bounces before it has a reason to buy.",
   },
   {
-    title: "Leads without follow-up",
-    body: "Enquiries land in an inbox, a spreadsheet or nowhere. Opportunities cool off before they're worked.",
+    title: "Interest without a next action",
+    body: "They add to cart, enquire, or leave. Nobody owns a next step or a due date.",
   },
 ];
 
 const engines = [
   {
     tag: "Attention Engine",
-    title: "Attract the right people",
-    body: "Strategic AI-powered video and social content that communicates value, builds recognition and directs relevant prospects toward an offer.",
+    title: "Earn the click with a promise",
+    body: "AI-produced product creative and short-form video built around one hook a page can keep — not generic brand filler.",
   },
   {
     tag: "Conversion Engine",
-    title: "Convert attention into leads",
-    body: "Conversion-focused websites and landing pages that establish trust and guide visitors toward a single, clear action.",
+    title: "Continue the promise after the click",
+    body: "Campaign landing experiences that match the ad hook, sell one product and offer one clear next step.",
   },
   {
     tag: "Follow-Up Engine",
-    title: "Move leads toward a decision",
-    body: "CRM pipelines and automated follow-up that organise opportunities and give each lead a clear next step.",
+    title: "Own the next action",
+    body: "Connected follow-up across your existing stack — clicked, added to cart, enquired, purchased — each with an owner and a due date.",
   },
 ];
 
 const process = [
-  { n: "01", title: "Diagnose", body: "Audit your current journey — website, content, capture and follow-up." },
-  { n: "02", title: "Design", body: "Map the system to your service, capacity, sales cycle and tools." },
-  { n: "03", title: "Build", body: "Ship the pages, content plan, pipelines and automations." },
-  { n: "04", title: "Launch", body: "Integrate, connect analytics and go live." },
-  { n: "05", title: "Optimise", body: "Track what converts, refine and compound results." },
+  { n: "01", title: "Diagnose", body: "Ads, destination URL, and what happens after a non-purchase." },
+  { n: "02", title: "Isolate the leak", body: "Usually the landing, sometimes the creative, sometimes follow-up." },
+  { n: "03", title: "Sprint", body: "Most first jobs are a campaign landing that continues the ad. Not a full rebuild." },
+  { n: "04", title: "Connect the rest", body: "Only if the leak is real in the other engines." },
 ];
 
 const audiences = [
-  { title: "Home-service companies", body: "Renovation, HVAC, landscaping, cleaning, installation." },
-  { title: "Real estate & property", body: "Agents, brokerages, property managers, developers." },
-  { title: "Professional-service firms", body: "Legal, accounting, financial services, advisory." },
-  { title: "Clinics & appointment businesses", body: "Dental, aesthetics, wellness, therapy, veterinary." },
-  { title: "Consultants & training companies", body: "B2B consultants, coaches, corporate training." },
+  { title: "Ads landing on the homepage", body: "Paid traffic sent to / or a generic collection page." },
+  { title: "PDP that doesn't match the hook", body: "The product page never continues the promise in the ad." },
+  { title: "Real product, named owner", body: "Someone internally can approve and ship a sprint." },
+  { title: "Heading into a campaign window", body: "Including BFCM — spend booked, no page that matches it." },
 ];
 
 const proofItems = [
-  { tag: "Conceptual demonstration", title: "AI commercial video", body: "Short-form video concept illustrating a service business offer." },
-  { tag: "Conceptual demonstration", title: "Landing page example", body: "Example of a single-offer landing page structure." },
-  { tag: "Conceptual demonstration", title: "CRM pipeline", body: "Visual of an Audit Requested → Qualified → Booked pipeline." },
-  { tag: "Conceptual demonstration", title: "Customer journey map", body: "Content → Website → Lead → CRM → Follow-up → Customer." },
-  { tag: "Conceptual demonstration", title: "Before / after website analysis", body: "Structural comparison of a legacy site vs a converting one." },
+  {
+    tag: "Conceptual demonstration",
+    title: "AI product commercial",
+    body: "Fictional product. The job is to earn a click with a promise a page can keep.",
+    Mock: AdCreativeMock,
+  },
+  {
+    tag: "Conceptual demonstration",
+    title: "Conversion landing experience",
+    body: "Same promise as the ad, one product, one next step. Explicitly not the catalogue homepage.",
+    Mock: LandingPageMock,
+  },
+  {
+    tag: "Conceptual demonstration",
+    title: "Follow-up queue",
+    body: "Owner, stage, last activity, next action and due date across clicked, cart, enquiry and purchased.",
+    Mock: FollowUpQueueMock,
+  },
+  {
+    tag: "Conceptual demonstration",
+    title: "Connected campaign journey",
+    body: "AI creative → campaign page → action → follow-up, running as one system.",
+    Mock: CampaignJourneyMock,
+  },
 ];
 
 const auditCoverage = [
-  "Website clarity",
-  "Calls to action",
-  "Lead capture",
-  "Content opportunities",
-  "CRM structure",
-  "Follow-up gaps",
+  "Ad creative and hook",
+  "Post-click destination",
+  "Campaign page structure",
+  "Offer and next step",
+  "Cart and enquiry follow-up",
+  "Stack fit (Shopify / Klaviyo)",
   "Recommended priorities",
 ];
+
 
 function HomePage() {
   return (
@@ -162,11 +191,15 @@ function Hero() {
           <div className="max-w-2xl">
             <Eyebrow>Customer growth systems</Eyebrow>
             <h1 className="mt-6 text-4xl font-bold leading-[1.05] text-gradient sm:text-5xl lg:text-6xl">
-              Turn online attention into qualified leads and customers.
+              Turn attention into customers.
             </h1>
             <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-              Myric AI combines conversion-focused websites, AI-powered content and automated CRM follow-up
-              into one connected customer-growth system for service businesses.
+              AI creative, conversion-focused experiences and connected follow-up systems for
+              e-commerce brands.
+            </p>
+            <p className="mt-4 max-w-xl text-base text-muted-foreground">
+              We connect the systems between attention and customers. Media buying stays with you.
+              The leak is usually after the click.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -186,14 +219,14 @@ function Hero() {
               </a>
             </div>
             <p className="mt-6 text-xs text-muted-foreground">
-              Built for service businesses ready to attract, manage and convert more opportunities.
+              Concept demonstrations below — no invented results.
             </p>
           </div>
 
           <div className="relative rounded-3xl border border-border/60 bg-surface/70 p-6 backdrop-blur">
             <ConnectedDiagram className="w-full max-w-md" />
             <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-              <span>Content → Website → Lead → CRM → Follow-up → Customer</span>
+              <span>Creative → Campaign page → Action → Follow-up → Customer</span>
               <span className="rounded-full bg-primary/10 px-2 py-1 text-primary">live</span>
             </div>
           </div>
@@ -224,7 +257,8 @@ function Problem() {
         ))}
       </div>
       <p className="mt-10 max-w-3xl text-base text-muted-foreground">
-        Myric AI connects every stage so attention has a clear path toward becoming revenue.
+        Disconnected tools create disconnected growth. We connect creative, the post-click page and
+        follow-up so spend has somewhere to land.
       </p>
     </Section>
   );
@@ -266,10 +300,10 @@ function Process() {
       <div className="max-w-2xl">
         <Eyebrow>How it works</Eyebrow>
         <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
-          Five stages. One measurable journey.
+          Four steps. One measurable journey.
         </h2>
       </div>
-      <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-5">
+      <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         {process.map((s) => (
           <li key={s.n} className="rounded-2xl border border-border/60 bg-surface/50 p-6">
             <div className="font-display text-2xl font-bold text-primary">{s.n}</div>
@@ -288,10 +322,10 @@ function Audience() {
       <div className="max-w-2xl">
         <Eyebrow>Who it's for</Eyebrow>
         <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
-          Built for high-value service businesses.
+          Built for Shopify and e-commerce brands already spending on ads.
         </h2>
       </div>
-      <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 grid gap-5 md:grid-cols-2">
         {audiences.map((a) => (
           <div key={a.title} className="rounded-2xl border border-border/60 bg-background p-6">
             <h3 className="text-lg font-semibold">{a.title}</h3>
@@ -300,8 +334,8 @@ function Audience() {
         ))}
       </div>
       <p className="mt-10 max-w-3xl text-sm text-muted-foreground">
-        Myric AI is best suited to established businesses with a proven service, capacity for more
-        customers, and a team prepared to respond to opportunities.
+        Who it is not for: no-traffic stores, raw dropship catalogues, "redesign the whole theme for
+        cheap," or anyone who wants us to run their media buying.
       </p>
     </Section>
   );
@@ -316,11 +350,11 @@ function Proof() {
           System demonstrations.
         </h2>
         <p className="mt-4 text-muted-foreground">
-          Structural examples of the pieces we build. Real client work is shared privately in the Growth
-          Audit.
+          Structural examples of the pieces we build. Every one is a concept — no client names, no
+          invented results.
         </p>
       </div>
-      <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 grid gap-5 md:grid-cols-2">
         {proofItems.map((p) => (
           <button
             key={p.title}
@@ -328,8 +362,8 @@ function Proof() {
             onClick={() => trackEvent("portfolio_item_viewed", { item: p.title })}
             className="group relative overflow-hidden rounded-2xl border border-border/60 bg-surface/50 p-6 text-left transition-colors hover:border-primary/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <div className="aspect-[16/10] w-full rounded-lg border border-border/60 bg-linear-to-br from-surface via-surface-2 to-surface" />
-            <div className="mt-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <p.Mock />
+            <div className="mt-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-gold">
               {p.tag}
             </div>
             <h3 className="mt-2 text-base font-semibold">{p.title}</h3>
@@ -348,11 +382,11 @@ function AuditInvite() {
         <div>
           <Eyebrow>Growth Audit</Eyebrow>
           <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
-            Discover where your customer journey is losing opportunities.
+            Find out where your ad spend is leaking.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            The Growth Audit is a structured review of the pieces that decide whether attention becomes
-            revenue.
+            A structured look at creative, the post-click page, and what happens after interest. You
+            leave with priorities, not a 40-page PDF.
           </p>
           <Link
             to="/growth-audit"
