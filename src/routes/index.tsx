@@ -257,7 +257,8 @@ function Problem() {
         ))}
       </div>
       <p className="mt-10 max-w-3xl text-base text-muted-foreground">
-        Myric AI connects every stage so attention has a clear path toward becoming revenue.
+        Disconnected tools create disconnected growth. We connect creative, the post-click page and
+        follow-up so spend has somewhere to land.
       </p>
     </Section>
   );
@@ -381,11 +382,11 @@ function AuditInvite() {
         <div>
           <Eyebrow>Growth Audit</Eyebrow>
           <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
-            Discover where your customer journey is losing opportunities.
+            Find out where your ad spend is leaking.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            The Growth Audit is a structured review of the pieces that decide whether attention becomes
-            revenue.
+            A structured look at creative, the post-click page, and what happens after interest. You
+            leave with priorities, not a 40-page PDF.
           </p>
           <Link
             to="/growth-audit"
