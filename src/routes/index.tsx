@@ -226,7 +226,7 @@ function Hero() {
           <div className="relative rounded-3xl border border-border/60 bg-surface/70 p-6 backdrop-blur">
             <ConnectedDiagram className="w-full max-w-md" />
             <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-              <span>Content → Website → Lead → CRM → Follow-up → Customer</span>
+              <span>Creative → Campaign page → Action → Follow-up → Customer</span>
               <span className="rounded-full bg-primary/10 px-2 py-1 text-primary">live</span>
             </div>
           </div>
@@ -299,10 +299,10 @@ function Process() {
       <div className="max-w-2xl">
         <Eyebrow>How it works</Eyebrow>
         <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
-          Five stages. One measurable journey.
+          Four steps. One measurable journey.
         </h2>
       </div>
-      <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-5">
+      <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         {process.map((s) => (
           <li key={s.n} className="rounded-2xl border border-border/60 bg-surface/50 p-6">
             <div className="font-display text-2xl font-bold text-primary">{s.n}</div>
@@ -321,10 +321,10 @@ function Audience() {
       <div className="max-w-2xl">
         <Eyebrow>Who it's for</Eyebrow>
         <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
-          Built for high-value service businesses.
+          Built for Shopify and e-commerce brands already spending on ads.
         </h2>
       </div>
-      <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 grid gap-5 md:grid-cols-2">
         {audiences.map((a) => (
           <div key={a.title} className="rounded-2xl border border-border/60 bg-background p-6">
             <h3 className="text-lg font-semibold">{a.title}</h3>
@@ -333,8 +333,8 @@ function Audience() {
         ))}
       </div>
       <p className="mt-10 max-w-3xl text-sm text-muted-foreground">
-        Myric AI is best suited to established businesses with a proven service, capacity for more
-        customers, and a team prepared to respond to opportunities.
+        Who it is not for: no-traffic stores, raw dropship catalogues, "redesign the whole theme for
+        cheap," or anyone who wants us to run their media buying.
       </p>
     </Section>
   );
