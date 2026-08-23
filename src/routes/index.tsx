@@ -349,11 +349,11 @@ function Proof() {
           System demonstrations.
         </h2>
         <p className="mt-4 text-muted-foreground">
-          Structural examples of the pieces we build. Real client work is shared privately in the Growth
-          Audit.
+          Structural examples of the pieces we build. Every one is a concept — no client names, no
+          invented results.
         </p>
       </div>
-      <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 grid gap-5 md:grid-cols-2">
         {proofItems.map((p) => (
           <button
             key={p.title}
@@ -361,8 +361,8 @@ function Proof() {
             onClick={() => trackEvent("portfolio_item_viewed", { item: p.title })}
             className="group relative overflow-hidden rounded-2xl border border-border/60 bg-surface/50 p-6 text-left transition-colors hover:border-primary/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <div className="aspect-[16/10] w-full rounded-lg border border-border/60 bg-linear-to-br from-surface via-surface-2 to-surface" />
-            <div className="mt-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <p.Mock />
+            <div className="mt-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-gold">
               {p.tag}
             </div>
             <h3 className="mt-2 text-base font-semibold">{p.title}</h3>
