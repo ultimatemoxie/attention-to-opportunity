@@ -11,9 +11,15 @@ export const Route = createFileRoute("/thank-you")({
       { name: "robots", content: "noindex, nofollow" },
       {
         name: "description",
-        content: "We've received your Growth Audit request.",
+        content: "We've received your Growth Audit request and will follow up to book discovery.",
+      },
+      { property: "og:title", content: "Request received — Myric AI" },
+      {
+        property: "og:description",
+        content: "We'll follow up to book a discovery call and discuss your e-commerce growth audit.",
       },
       { property: "og:url", content: "/thank-you" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/thank-you" }],
   }),
@@ -44,8 +50,8 @@ function ThankYou() {
             Request received.
           </h1>
           <p className="mt-4 text-muted-foreground">
-            Thanks — we've got your details. To speed things up, book a 20-minute
-            intro call and we'll walk you through your Growth Audit findings live.
+            Thanks — we've got your details. We'll follow up to book a discovery call and discuss
+            where attention is leaking after the click.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">

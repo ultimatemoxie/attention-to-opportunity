@@ -14,15 +14,16 @@ export const Route = createFileRoute("/growth-audit")({
       {
         name: "description",
         content:
-          "Get a structured review of your website, funnel and follow-up. Concrete recommendations, no obligation.",
+          "Get a structured review of your ads, post-click experience and follow-up. Concrete recommendations, no obligation.",
       },
       { property: "og:title", content: "Request a Growth Audit — Myric AI" },
       {
         property: "og:description",
         content:
-          "Structured review of your website, funnel and follow-up. Clear recommendations, no obligation.",
+          "Structured review of your creative, campaign destination and follow-up. Clear recommendations, no obligation.",
       },
       { property: "og:url", content: "/growth-audit" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/growth-audit" }],
     scripts: [
@@ -34,7 +35,7 @@ export const Route = createFileRoute("/growth-audit")({
           serviceType: "Growth Audit",
           provider: { "@type": "Organization", name: "Myric AI" },
           description:
-            "A structured review of a service business's website, funnel and lead follow-up.",
+            "A structured review of an e-commerce brand's creative, post-click experience and follow-up.",
         }),
       },
     ],
@@ -51,52 +52,31 @@ type FormState = {
   // Step 2
   business: string;
   website: string;
-  country: string;
   industry: string;
-  main_service: string;
-  company_size: string;
   // Step 3
-  revenue_range: string;
-  avg_customer_value: string;
-  monthly_leads: string;
-  has_website: "yes" | "no" | "";
-  has_crm: "yes" | "no" | "";
-  acquisition_source: string;
-  response_time: string;
+  running_ads: "yes" | "no" | "";
+  ad_destination: string;
   // Step 4
-  bottleneck: string;
-  solution_interest: string;
+  biggest_leak: string;
   timeline: string;
-  investment_range: string;
   // Step 5
   consent: boolean;
 };
 
 const initialState: FormState = {
   name: "", email: "", phone: "", role: "",
-  business: "", website: "", country: "", industry: "", main_service: "", company_size: "",
-  revenue_range: "", avg_customer_value: "", monthly_leads: "",
-  has_website: "", has_crm: "",
-  acquisition_source: "", response_time: "",
-  bottleneck: "", solution_interest: "", timeline: "", investment_range: "",
+  business: "", website: "", industry: "",
+  running_ads: "", ad_destination: "",
+  biggest_leak: "", timeline: "",
   consent: false,
 };
 
-const industries = [
-  "Home services", "Real estate & property", "Professional services",
-  "Clinic / appointment-based", "Consulting / training", "Other",
-];
-const companySizes = ["Just me", "2–5", "6–20", "21–50", "51–200", "200+"];
-const revenueRanges = ["Under £10k / mo", "£10k–£50k / mo", "£50k–£250k / mo", "£250k+ / mo", "Prefer not to say"];
-const customerValues = ["Under £500", "£500–£2k", "£2k–£10k", "£10k–£50k", "£50k+"];
-const leadVolumes = ["0–10 / mo", "10–50 / mo", "50–200 / mo", "200+ / mo"];
-const acqSources = ["Referrals", "Paid ads", "SEO / content", "Social", "Outbound", "Mixed / other"];
-const responseTimes = ["Within minutes", "Within a few hours", "Same day", "Next business day", "Longer / inconsistent"];
-const solutionInterests = ["AI content", "Website / landing pages", "CRM & follow-up", "Full connected system"];
+const industries = ["Shopify", "Other e-commerce", "Other"];
+const adDestinations = ["Homepage (/)" , "Product detail page (PDP)", "Campaign landing page", "Collection page", "Not sure"];
+const biggestLeaks = ["Creative", "Conversion", "Follow-up", "Not sure"];
 const timelines = ["ASAP", "Within 1 month", "1–3 months", "Just exploring"];
-const investments = ["Under £2k", "£2k–£5k", "£5k–£15k", "£15k+", "Not sure yet"];
 
-const stepLabels = ["Contact", "Business", "Metrics", "Goals", "Consent"];
+const stepLabels = ["Contact", "Business", "Traffic", "Challenge", "Consent"];
 
 function GrowthAudit() {
   const navigate = useNavigate();
@@ -142,7 +122,7 @@ function GrowthAudit() {
       if (!state.business.trim()) next.business = "Required";
     }
     if (i === 3) {
-      if (state.bottleneck.trim().length < 10) next.bottleneck = "Please share a little more detail (10+ characters)";
+      if (!state.biggest_leak) next.biggest_leak = "Please choose the biggest leak";
     }
     if (i === 4) {
       if (!state.consent) next.consent = "Please confirm to continue";
@@ -173,21 +153,13 @@ function GrowthAudit() {
           role: state.role.trim(),
           business: state.business.trim(),
           website: state.website.trim(),
-          country: state.country.trim(),
           industry: state.industry.trim(),
-          main_service: state.main_service.trim(),
-          company_size: state.company_size.trim(),
-          revenue_range: state.revenue_range.trim(),
-          avg_customer_value: state.avg_customer_value.trim(),
-          monthly_leads: state.monthly_leads.trim(),
-          has_website: state.has_website === "" ? undefined : state.has_website === "yes",
-          has_crm: state.has_crm === "" ? undefined : state.has_crm === "yes",
-          acquisition_source: state.acquisition_source.trim(),
-          response_time: state.response_time.trim(),
-          bottleneck: state.bottleneck.trim(),
-          solution_interest: state.solution_interest.trim(),
+          bottleneck: [
+            `Biggest leak: ${state.biggest_leak}`,
+            `Running ads: ${state.running_ads || "Not specified"}`,
+            `Main ad destination: ${state.ad_destination || "Not specified"}`,
+          ].join(". "),
           timeline: state.timeline.trim(),
-          investment_range: state.investment_range.trim(),
           consent: true as const,
           ...utm,
         },
@@ -225,8 +197,8 @@ function GrowthAudit() {
             A clear plan for your next growth step.
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-            Five short steps. We use this to prepare a structured review of your website, funnel and
-            follow-up before we speak.
+             Five short steps. We use this to prepare a structured review of your creative, campaign
+             destination and follow-up before we speak.
           </p>
 
           {/* Progress */}
@@ -265,50 +237,22 @@ function GrowthAudit() {
               <div className="grid gap-5 sm:grid-cols-2">
                 <Field label="Business name" value={state.business} onChange={(v) => set("business", v)} error={errors.business} required />
                 <Field label="Website" type="url" value={state.website} onChange={(v) => set("website", v)} placeholder="https://" />
-                <Field label="Country" value={state.country} onChange={(v) => set("country", v)} />
                 <Select label="Industry" value={state.industry} onChange={(v) => set("industry", v)} options={industries} />
-                <Field label="Main service" value={state.main_service} onChange={(v) => set("main_service", v)} placeholder="e.g. Kitchen renovations" />
-                <Select label="Company size" value={state.company_size} onChange={(v) => set("company_size", v)} options={companySizes} />
               </div>
             )}
 
             {step === 2 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <Select label="Average customer value" value={state.avg_customer_value} onChange={(v) => set("avg_customer_value", v)} options={customerValues} />
-                <Select label="Monthly leads (approx)" value={state.monthly_leads} onChange={(v) => set("monthly_leads", v)} options={leadVolumes} />
-                <Select label="Monthly revenue range" value={state.revenue_range} onChange={(v) => set("revenue_range", v)} options={revenueRanges} />
-                <Select label="Main acquisition source" value={state.acquisition_source} onChange={(v) => set("acquisition_source", v)} options={acqSources} />
-                <YesNo label="Do you have a website?" value={state.has_website} onChange={(v) => set("has_website", v)} />
-                <YesNo label="Do you use a CRM?" value={state.has_crm} onChange={(v) => set("has_crm", v)} />
-                <Select label="Typical lead response time" value={state.response_time} onChange={(v) => set("response_time", v)} options={responseTimes} />
+                <YesNo label="Are you running ads right now?" value={state.running_ads} onChange={(v) => set("running_ads", v)} />
+                <Select label="Destination of your main ad" value={state.ad_destination} onChange={(v) => set("ad_destination", v)} options={adDestinations} />
               </div>
             )}
 
             {step === 3 && (
-              <div className="grid gap-5">
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium">
-                    Biggest growth challenge <span className="text-primary">*</span>
-                  </label>
-                  <textarea
-                    rows={5}
-                    value={state.bottleneck}
-                    onChange={(e) => set("bottleneck", e.target.value)}
-                    minLength={10}
-                    maxLength={2000}
-                    placeholder="e.g. Traffic but few enquiries; leads not followed up; no reliable source of new customers."
-                    className={cn(
-                      "w-full rounded-md border bg-background/60 px-3 py-2 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-primary/30",
-                      errors.bottleneck ? "border-destructive" : "border-input",
-                    )}
-                  />
-                  {errors.bottleneck && <p className="mt-1 text-xs text-destructive">{errors.bottleneck}</p>}
-                </div>
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <Select label="Solution of interest" value={state.solution_interest} onChange={(v) => set("solution_interest", v)} options={solutionInterests} />
-                  <Select label="Desired timeline" value={state.timeline} onChange={(v) => set("timeline", v)} options={timelines} />
-                  <Select label="Investment range" value={state.investment_range} onChange={(v) => set("investment_range", v)} options={investments} />
-                </div>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Select label="Biggest leak" value={state.biggest_leak} onChange={(v) => set("biggest_leak", v)} options={biggestLeaks} />
+                <Select label="Desired timeline" value={state.timeline} onChange={(v) => set("timeline", v)} options={timelines} />
+                {errors.biggest_leak && <p className="text-xs text-destructive">{errors.biggest_leak}</p>}
               </div>
             )}
 
