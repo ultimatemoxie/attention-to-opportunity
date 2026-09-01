@@ -79,7 +79,7 @@ const ORGANIZATION_JSONLD = {
   "@type": "Organization",
   name: "Myric AI",
   description:
-    "Customer-growth systems for e-commerce brands. AI creative, conversion-focused experiences and connected follow-up systems in one connected system.",
+    "Customer-growth systems for e-commerce brands. AI creative, conversion-focused experiences and connected follow-up systems.",
   slogan: "Connected. Automated. Growth.",
 };
 

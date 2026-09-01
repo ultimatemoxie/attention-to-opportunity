@@ -30,9 +30,9 @@ function PrivacyPage() {
       <H>Information we collect</H>
       <p>
         When you submit the Growth Audit form we collect your name, business name,
-        website, email, phone (if provided), monthly revenue range and a description
-        of your current growth bottleneck. We also record basic attribution data such
-        as UTM parameters and the referring URL.
+        website, email, phone (if provided), your traffic context and a description of
+        the biggest leak in your current customer journey. We also record basic
+        attribution data such as UTM parameters and the referring URL.
       </p>
 
       <H>How we use it</H>

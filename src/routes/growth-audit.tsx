@@ -72,7 +72,7 @@ const initialState: FormState = {
 };
 
 const industries = ["Shopify", "Other e-commerce", "Other"];
-const adDestinations = ["Homepage (/) ", "Product detail page (PDP)", "Campaign landing page", "Collection page", "Not sure"];
+const adDestinations = ["Homepage (/)" , "Product detail page (PDP)", "Campaign landing page", "Collection page", "Not sure"];
 const biggestLeaks = ["Creative", "Conversion", "Follow-up", "Not sure"];
 const timelines = ["ASAP", "Within 1 month", "1–3 months", "Just exploring"];
 
