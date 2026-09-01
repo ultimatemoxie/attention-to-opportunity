@@ -79,8 +79,8 @@ const ORGANIZATION_JSONLD = {
   "@type": "Organization",
   name: "Myric AI",
   description:
-    "Customer-growth systems for high-value service businesses. AI content, conversion websites and CRM automation in one connected system.",
-  slogan: "Turn online attention into qualified leads.",
+    "Customer-growth systems for e-commerce brands. AI creative, conversion-focused experiences and connected follow-up systems in one connected system.",
+  slogan: "Connected. Automated. Growth.",
 };
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -89,11 +89,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#061A3A" },
-      { title: "Myric AI — Customer growth systems for service businesses" },
+      { title: "Myric AI — Customer growth systems for e-commerce brands" },
       {
         name: "description",
         content:
-          "Myric AI helps service businesses turn online attention into qualified leads, booked appointments and structured sales opportunities.",
+          "Myric AI helps Shopify and e-commerce brands turn ad attention into customers with AI creative, conversion-focused experiences and connected follow-up.",
       },
       { property: "og:site_name", content: "Myric AI" },
       { property: "og:type", content: "website" },

@@ -12,7 +12,7 @@ export function SiteFooter() {
             <span className="font-display text-xl font-semibold tracking-tight">Myric AI</span>
           </div>
           <p className="mt-4 max-w-xs text-sm text-white/70">
-            Customer-growth systems for established service businesses.
+            Customer growth systems for e-commerce brands.
           </p>
           <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">
             Connected. Automated. Growth.
@@ -58,7 +58,7 @@ export function SiteFooter() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-2 px-4 py-6 text-xs text-white/60 sm:flex-row sm:items-center sm:px-6">
           <span>© {new Date().getFullYear()} Myric AI. All rights reserved.</span>
-          <span>Built for service businesses that want measurable growth.</span>
+          <span>Built for e-commerce brands that want measurable growth.</span>
         </div>
       </div>
     </footer>
