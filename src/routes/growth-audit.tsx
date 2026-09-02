@@ -1,11 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { submitLead } from "@/lib/leads.functions";
 import { captureUtm, readUtm } from "@/lib/utm";
 import { trackEvent } from "@/lib/analytics";
 import { SiteFooter } from "@/components/site/footer";
 import { cn } from "@/lib/utils";
+
+const SITE_URL = process.env.SITE_URL || "https://myric.ai";
 
 export const Route = createFileRoute("/growth-audit")({
   head: () => ({
@@ -22,10 +24,12 @@ export const Route = createFileRoute("/growth-audit")({
         content:
           "Structured review of your creative, campaign destination and follow-up. Clear recommendations, no obligation.",
       },
-      { property: "og:url", content: "/growth-audit" },
+      { property: "og:url", content: `${SITE_URL}/growth-audit` },
+      { property: "og:image", content: `${SITE_URL}/og.png` },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: `${SITE_URL}/og.png` },
     ],
-    links: [{ rel: "canonical", href: "/growth-audit" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/growth-audit` }],
     scripts: [
       {
         type: "application/ld+json",
@@ -64,15 +68,28 @@ type FormState = {
 };
 
 const initialState: FormState = {
-  name: "", email: "", phone: "", role: "",
-  business: "", website: "", industry: "",
-  running_ads: "", ad_destination: "",
-  biggest_leak: "", timeline: "",
+  name: "",
+  email: "",
+  phone: "",
+  role: "",
+  business: "",
+  website: "",
+  industry: "",
+  running_ads: "",
+  ad_destination: "",
+  biggest_leak: "",
+  timeline: "",
   consent: false,
 };
 
 const industries = ["Shopify", "Other e-commerce", "Other"];
-const adDestinations = ["Homepage (/)" , "Product detail page (PDP)", "Campaign landing page", "Collection page", "Not sure"];
+const adDestinations = [
+  "Homepage (/)",
+  "Product detail page (PDP)",
+  "Campaign landing page",
+  "Collection page",
+  "Not sure",
+];
 const biggestLeaks = ["Creative", "Conversion", "Follow-up", "Not sure"];
 const timelines = ["ASAP", "Within 1 month", "1–3 months", "Just exploring"];
 
@@ -88,6 +105,7 @@ function GrowthAudit() {
   const [submitting, setSubmitting] = useState(false);
   const startedRef = useRef(false);
   const submittedRef = useRef(false);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     captureUtm();
@@ -161,6 +179,7 @@ function GrowthAudit() {
           ].join(". "),
           timeline: state.timeline.trim(),
           consent: true as const,
+          website_confirmation: honeypotRef.current?.value || "",
           ...utm,
         },
       });
@@ -168,7 +187,9 @@ function GrowthAudit() {
       trackEvent("audit_form_submitted");
       navigate({ to: "/thank-you" });
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setServerError(
+        err instanceof Error ? err.message : "Something went wrong. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -180,8 +201,12 @@ function GrowthAudit() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border/60">
         <div className="mx-auto flex h-16 max-w-4xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="font-display text-base font-semibold">Myric AI</Link>
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Back</Link>
+          <Link to="/" className="font-display text-base font-semibold">
+            Myric AI
+          </Link>
+          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+            ← Back
+          </Link>
         </div>
       </header>
 
@@ -194,17 +219,19 @@ function GrowthAudit() {
             Growth Audit
           </div>
           <h1 className="mt-5 text-3xl font-bold text-gradient sm:text-4xl">
-            A clear plan for your next growth step.
+            Find the clearest next move.
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-             Five short steps. We use this to prepare a structured review of your creative, campaign
-             destination and follow-up before we speak.
+            Five short steps. We use the essentials to prepare a focused review of your creative,
+            campaign destination and follow-up before we speak.
           </p>
 
           {/* Progress */}
           <div className="mt-8">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Step {step + 1} of {stepLabels.length} — {stepLabels[step]}</span>
+              <span>
+                Step {step + 1} of {stepLabels.length} — {stepLabels[step]}
+              </span>
               <span>{Math.round(progress)}%</span>
             </div>
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface">
@@ -224,35 +251,110 @@ function GrowthAudit() {
             className="mt-8 rounded-2xl border border-border/60 bg-surface/70 p-6 backdrop-blur sm:p-8"
             noValidate
           >
+            <div
+              className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden"
+              aria-hidden="true"
+            >
+              <label htmlFor="website-confirmation">Leave this field empty</label>
+              <input
+                ref={honeypotRef}
+                id="website-confirmation"
+                name="website_confirmation"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
             {step === 0 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <Field label="Full name" value={state.name} onChange={(v) => set("name", v)} error={errors.name} required />
-                <Field label="Business email" type="email" value={state.email} onChange={(v) => set("email", v)} error={errors.email} required />
-                <Field label="Phone or WhatsApp" type="tel" value={state.phone} onChange={(v) => set("phone", v)} />
-                <Field label="Your role" value={state.role} onChange={(v) => set("role", v)} placeholder="Founder, Marketing lead…" />
+                <Field
+                  label="Full name"
+                  value={state.name}
+                  onChange={(v) => set("name", v)}
+                  error={errors.name}
+                  required
+                />
+                <Field
+                  label="Business email"
+                  type="email"
+                  value={state.email}
+                  onChange={(v) => set("email", v)}
+                  error={errors.email}
+                  required
+                />
+                <Field
+                  label="Phone or WhatsApp"
+                  type="tel"
+                  value={state.phone}
+                  onChange={(v) => set("phone", v)}
+                />
+                <Field
+                  label="Your role"
+                  value={state.role}
+                  onChange={(v) => set("role", v)}
+                  placeholder="Founder, Marketing lead…"
+                />
               </div>
             )}
 
             {step === 1 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <Field label="Business name" value={state.business} onChange={(v) => set("business", v)} error={errors.business} required />
-                <Field label="Website" type="url" value={state.website} onChange={(v) => set("website", v)} placeholder="https://" />
-                <Select label="Industry" value={state.industry} onChange={(v) => set("industry", v)} options={industries} />
+                <Field
+                  label="Business name"
+                  value={state.business}
+                  onChange={(v) => set("business", v)}
+                  error={errors.business}
+                  required
+                />
+                <Field
+                  label="Website"
+                  type="url"
+                  value={state.website}
+                  onChange={(v) => set("website", v)}
+                  placeholder="https://"
+                />
+                <Select
+                  label="Industry"
+                  value={state.industry}
+                  onChange={(v) => set("industry", v)}
+                  options={industries}
+                />
               </div>
             )}
 
             {step === 2 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <YesNo label="Are you running ads right now?" value={state.running_ads} onChange={(v) => set("running_ads", v)} />
-                <Select label="Destination of your main ad" value={state.ad_destination} onChange={(v) => set("ad_destination", v)} options={adDestinations} />
+                <YesNo
+                  label="Are you running ads right now?"
+                  value={state.running_ads}
+                  onChange={(v) => set("running_ads", v)}
+                />
+                <Select
+                  label="Destination of your main ad"
+                  value={state.ad_destination}
+                  onChange={(v) => set("ad_destination", v)}
+                  options={adDestinations}
+                />
               </div>
             )}
 
             {step === 3 && (
               <div className="grid gap-5 sm:grid-cols-2">
-                <Select label="Biggest leak" value={state.biggest_leak} onChange={(v) => set("biggest_leak", v)} options={biggestLeaks} />
-                <Select label="Desired timeline" value={state.timeline} onChange={(v) => set("timeline", v)} options={timelines} />
-                {errors.biggest_leak && <p className="text-xs text-destructive">{errors.biggest_leak}</p>}
+                <Select
+                  label="Biggest leak"
+                  value={state.biggest_leak}
+                  onChange={(v) => set("biggest_leak", v)}
+                  options={biggestLeaks}
+                />
+                <Select
+                  label="Desired timeline"
+                  value={state.timeline}
+                  onChange={(v) => set("timeline", v)}
+                  options={timelines}
+                />
+                {errors.biggest_leak && (
+                  <p className="text-xs text-destructive">{errors.biggest_leak}</p>
+                )}
               </div>
             )}
 
@@ -273,12 +375,18 @@ function GrowthAudit() {
                   />
                   <span>
                     I'm happy for Myric AI to contact me about my Growth Audit. See our{" "}
-                    <Link to="/privacy" className="text-primary hover:underline">privacy notice</Link>.
+                    <Link to="/privacy" className="text-primary hover:underline">
+                      privacy notice
+                    </Link>
+                    .
                   </span>
                 </label>
                 {errors.consent && <p className="text-xs text-destructive">{errors.consent}</p>}
                 {serverError && (
-                  <div role="alert" className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                  <div
+                    role="alert"
+                    className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                  >
                     {serverError}
                   </div>
                 )}
@@ -322,7 +430,13 @@ function GrowthAudit() {
 }
 
 function Field({
-  label, value, onChange, type = "text", required, placeholder, error,
+  label,
+  value,
+  onChange,
+  type = "text",
+  required,
+  placeholder,
+  error,
 }: {
   label: string;
   value: string;
@@ -332,61 +446,89 @@ function Field({
   placeholder?: string;
   error?: string;
 }) {
+  const id = useId();
+  const errorId = `${id}-error`;
+
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-medium">
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium">
         {label} {required && <span className="text-primary">*</span>}
       </label>
       <input
+        id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         type={type}
         required={required}
         placeholder={placeholder}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? errorId : undefined}
         className={cn(
           "w-full rounded-md border bg-background/60 px-3 py-2 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-primary/30",
           error ? "border-destructive" : "border-input",
         )}
       />
-      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
+      {error && (
+        <p id={errorId} className="mt-1 text-xs text-destructive">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
 
 function Select({
-  label, value, onChange, options,
+  label,
+  value,
+  onChange,
+  options,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: string[];
 }) {
+  const id = useId();
+
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-medium">{label}</label>
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium">
+        {label}
+      </label>
       <select
+        id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full rounded-md border border-input bg-background/60 px-3 py-2 text-sm text-foreground shadow-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30"
       >
         <option value="">Select…</option>
-        {options.map((o) => <option key={o} value={o}>{o}</option>)}
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
       </select>
     </div>
   );
 }
 
 function YesNo({
-  label, value, onChange,
+  label,
+  value,
+  onChange,
 }: {
   label: string;
   value: "yes" | "no" | "";
   onChange: (v: "yes" | "no") => void;
 }) {
+  const labelId = useId();
+
   return (
-    <div>
-      <label className="mb-1.5 block text-sm font-medium">{label}</label>
-      <div className="grid grid-cols-2 gap-2">
+    <fieldset>
+      <legend id={labelId} className="mb-1.5 block text-sm font-medium">
+        {label}
+      </legend>
+      <div className="grid grid-cols-2 gap-2" aria-labelledby={labelId}>
         {(["yes", "no"] as const).map((opt) => (
           <button
             key={opt}
@@ -403,6 +545,6 @@ function YesNo({
           </button>
         ))}
       </div>
-    </div>
+    </fieldset>
   );
 }

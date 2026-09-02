@@ -3,8 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
 
-const optStr = (max: number) =>
-  z.string().trim().max(max).optional().or(z.literal(""));
+const optStr = (max: number) => z.string().trim().max(max).optional().or(z.literal(""));
 
 const leadSchema = z.object({
   // Contact
@@ -42,6 +41,7 @@ const leadSchema = z.object({
   utm_content: z.string().max(200).optional(),
   referrer: z.string().max(500).optional(),
   landing_path: z.string().max(500).optional(),
+  website_confirmation: z.string().max(0).optional(),
 });
 
 export type LeadInput = z.infer<typeof leadSchema>;
@@ -52,7 +52,7 @@ const emptyToNull = (value: string | undefined) => {
 };
 
 export const submitLead = createServerFn({ method: "POST" })
-  .inputValidator((raw: unknown) => leadSchema.parse(raw))
+  .validator((raw: unknown) => leadSchema.parse(raw))
   .handler(async ({ data }) => {
     const url = process.env.SUPABASE_URL;
     const key = process.env.SUPABASE_PUBLISHABLE_KEY;

@@ -1,10 +1,19 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { ArrowRight, Menu } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 
+const navItems = [
+  { href: "/#services", label: "Approach" },
+  { href: "/#how-it-works", label: "Process" },
+  { href: "/#about", label: "Why Myric" },
+  { href: "/#faq", label: "FAQ" },
+];
+
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false);
+  const menuRef = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -16,63 +25,95 @@ export function SiteNav() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all",
+        "sticky top-0 z-50 w-full transition-all duration-300",
         scrolled
-          ? "border-b border-border/60 bg-background/80 backdrop-blur"
-          : "border-b border-transparent",
+          ? "border-b border-border/70 bg-background/90 shadow-[0_10px_35px_-30px_rgba(6,26,58,0.45)] backdrop-blur-xl"
+          : "border-b border-border/50 bg-background/80 backdrop-blur-md",
       )}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:h-[4.5rem] sm:px-6">
         <Link
           to="/"
-          className="flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground"
+          aria-label="Myric AI home"
+          className="flex shrink-0 items-center gap-2.5 text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
         >
           <LogoMark />
-          <span className="font-display text-base">Myric AI</span>
+          <span className="whitespace-nowrap font-display text-lg font-semibold">Myric AI</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          <a
-            href="/#how-it-works"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            How it works
-          </a>
-          <a
-            href="/#services"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Services
-          </a>
-          <a
-            href="/#faq"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            FAQ
-          </a>
+        <nav aria-label="Primary" className="ml-auto hidden items-center gap-7 lg:flex">
+          {navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="nav-link text-sm font-medium text-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
 
-        <Link
-          to="/growth-audit"
-          onClick={() => trackEvent("cta_click", { location: "nav", cta: "growth_audit" })}
-          className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-[0_6px_20px_-8px_var(--electric)] transition-transform hover:translate-y-[-1px]"
-        >
-          Request a Growth Audit
-          <span aria-hidden>→</span>
-        </Link>
+        <div className="ml-auto flex items-center gap-2 lg:ml-5">
+          <details ref={menuRef} className="group relative lg:hidden">
+            <summary
+              aria-label="Open navigation menu"
+              className="grid h-10 w-10 cursor-pointer list-none place-items-center rounded-full border border-border bg-white text-foreground transition-colors hover:border-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            >
+              <Menu aria-hidden className="h-4 w-4" />
+            </summary>
+            <nav
+              aria-label="Mobile navigation"
+              className="absolute right-0 top-12 w-56 overflow-hidden rounded-2xl border border-border bg-white p-2 shadow-[0_24px_70px_-35px_rgba(6,26,58,0.55)]"
+            >
+              {navItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => menuRef.current?.removeAttribute("open")}
+                  className="block rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </details>
+
+          <Link
+            to="/growth-audit"
+            onClick={() => trackEvent("cta_click", { location: "nav", cta: "growth_audit" })}
+            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold sm:px-5"
+          >
+            <span className="hidden min-[390px]:inline">Growth Audit</span>
+            <span className="min-[390px]:hidden">Start</span>
+            <ArrowRight aria-hidden className="h-3.5 w-3.5 text-gold-soft" />
+          </Link>
+        </div>
       </div>
     </header>
   );
 }
 
-function LogoMark() {
+export function LogoMark({ inverse = false }: { inverse?: boolean }) {
   return (
-    <span className="relative grid h-8 w-8 place-items-center rounded-full bg-navy">
-      <svg viewBox="0 0 32 32" className="h-5 w-5" aria-hidden>
-        <circle cx="8" cy="10" r="2" fill="#C79635" />
-        <circle cx="24" cy="10" r="2" fill="#C79635" />
-        <circle cx="16" cy="22" r="2" fill="#C79635" />
-        <path d="M8 10 L16 22 L24 10" stroke="#FAF8F3" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    <span
+      className={cn(
+        "relative grid h-9 w-9 shrink-0 place-items-center rounded-full",
+        inverse ? "border border-white/20 bg-white/5" : "bg-navy",
+      )}
+      aria-hidden
+    >
+      <svg viewBox="0 0 36 36" className="h-6 w-6">
+        <path
+          d="M8.5 11.5 18 25l9.5-13.5"
+          fill="none"
+          stroke={inverse ? "#FAF8F3" : "#FAF8F3"}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.6"
+        />
+        <circle cx="8.5" cy="11.5" r="2.2" fill="#C79635" />
+        <circle cx="27.5" cy="11.5" r="2.2" fill="#C79635" />
+        <circle cx="18" cy="25" r="2.2" fill="#C79635" />
       </svg>
     </span>
   );

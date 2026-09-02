@@ -12,6 +12,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+const SITE_URL = process.env.SITE_URL || "https://myric.ai";
+
 function NotFoundComponent() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4">
@@ -78,6 +80,8 @@ const ORGANIZATION_JSONLD = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Myric AI",
+  url: SITE_URL,
+  logo: `${SITE_URL}/favicon.ico`,
   description:
     "Customer-growth systems for e-commerce brands. AI creative, conversion-focused experiences and connected follow-up systems.",
   slogan: "Connected. Automated. Growth.",
@@ -97,7 +101,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:site_name", content: "Myric AI" },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: `${SITE_URL}/og.png` },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: `${SITE_URL}/og.png` },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

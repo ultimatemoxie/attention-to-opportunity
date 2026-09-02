@@ -58,44 +58,44 @@
   --radius: 0.5rem;
 
   /* Warm white canvas, navy ink */
-  --background: #FAF8F3;
-  --foreground: #061A3A;
+  --background: #faf8f3;
+  --foreground: #061a3a;
 
-  --surface: #FFFFFF;
-  --surface-2: #F3EEE2;
+  --surface: #ffffff;
+  --surface-2: #f3eee2;
 
-  --card: #FFFFFF;
-  --card-foreground: #061A3A;
-  --popover: #FFFFFF;
-  --popover-foreground: #061A3A;
+  --card: #ffffff;
+  --card-foreground: #061a3a;
+  --popover: #ffffff;
+  --popover-foreground: #061a3a;
 
   /* Primary is navy; gold is the accent */
-  --primary: #061A3A;
-  --primary-foreground: #FAF8F3;
-  --navy: #061A3A;
+  --primary: #061a3a;
+  --primary-foreground: #faf8f3;
+  --navy: #061a3a;
   --navy-deep: #031127;
-  --gold: #C79635;
-  --gold-soft: #E1C27A;
+  --gold: #c79635;
+  --gold-soft: #e1c27a;
 
-  --secondary: #F3EEE2;
-  --secondary-foreground: #061A3A;
-  --muted: #F3EEE2;
+  --secondary: #f3eee2;
+  --secondary-foreground: #061a3a;
+  --muted: #f3eee2;
   --muted-foreground: #566176;
-  --accent: #C79635;
-  --accent-foreground: #061A3A;
-  --destructive: #B4442A;
-  --destructive-foreground: #FAF8F3;
+  --accent: #c79635;
+  --accent-foreground: #061a3a;
+  --destructive: #b4442a;
+  --destructive-foreground: #faf8f3;
 
-  --border: #E7E1D5;
-  --input: #E7E1D5;
-  --ring: #C79635;
+  --border: #e7e1d5;
+  --input: #e7e1d5;
+  --ring: #c79635;
 }
 
 .dark {
-  --background: #FAF8F3;
-  --foreground: #061A3A;
-  --border: #E7E1D5;
-  --input: #E7E1D5;
+  --background: #faf8f3;
+  --foreground: #061a3a;
+  --border: #e7e1d5;
+  --input: #e7e1d5;
 }
 
 @layer base {
@@ -104,6 +104,7 @@
   }
   html {
     color-scheme: light;
+    scroll-behavior: smooth;
   }
   body {
     background-color: var(--color-background);
@@ -112,7 +113,17 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-  h1, h2, h3, h4 {
+  button,
+  a,
+  summary,
+  input,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.015em;
     font-weight: 600;
@@ -125,8 +136,8 @@
 
 @utility bg-grid {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, #061A3A 5%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, #061A3A 5%, transparent) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, #061a3a 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, #061a3a 5%, transparent) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
@@ -139,7 +150,7 @@
 }
 
 @utility text-gradient {
-  background: linear-gradient(180deg, #061A3A 0%, #1a355e 100%);
+  background: linear-gradient(180deg, #061a3a 0%, #1a355e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -161,4 +172,152 @@
 @utility divider-gold {
   height: 1px;
   background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+@layer components {
+  .button-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    width: fit-content;
+    min-height: 2.875rem;
+    border-radius: 9999px;
+    background: var(--navy);
+    padding: 0.75rem 1.35rem;
+    color: var(--primary-foreground);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      background-color 180ms ease;
+    box-shadow: 0 14px 30px -20px rgba(6, 26, 58, 0.75);
+  }
+
+  .button-primary:hover {
+    transform: translateY(-2px);
+    background: #0b2750;
+    box-shadow: 0 18px 36px -20px rgba(6, 26, 58, 0.85);
+  }
+
+  .button-primary:focus-visible,
+  .button-secondary:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+  }
+
+  .button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 2.875rem;
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.72);
+    padding: 0.75rem 1.35rem;
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .button-secondary:hover {
+    border-color: var(--gold);
+    background: #fff;
+  }
+
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.45rem;
+    left: 0;
+    height: 1px;
+    background: var(--gold);
+    content: "";
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 180ms ease;
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .footer-link {
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.875rem;
+    transition: color 160ms ease;
+  }
+
+  .footer-link:hover {
+    color: #fff;
+  }
+
+  .footer-link:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+  }
+
+  .hero-paper {
+    background:
+      radial-gradient(circle at 74% 16%, rgba(199, 150, 53, 0.14), transparent 27rem),
+      linear-gradient(115deg, #faf8f3 0%, #faf8f3 52%, #f5f0e5 100%);
+  }
+
+  .brief-card::before {
+    position: absolute;
+    top: 0;
+    left: 2rem;
+    width: 4.5rem;
+    height: 3px;
+    background: var(--gold);
+    content: "";
+  }
+
+  .service-card {
+    position: relative;
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .service-card:hover {
+    border-color: color-mix(in oklab, var(--gold) 65%, var(--border));
+    transform: translateY(-4px);
+    box-shadow: 0 28px 60px -44px rgba(6, 26, 58, 0.5);
+  }
+}
+
+@media (max-width: 419px) {
+  .button-primary,
+  .button-secondary {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
